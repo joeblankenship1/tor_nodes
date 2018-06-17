@@ -173,3 +173,7 @@ a:hover {
 .mapboxgl-popup-anchor-top>.mapboxgl-popup-tip {
     border-bottom-color: #91c949;
 }
+
+.mapboxgl-popup {
+  padding-bottom: 50px;
+}

@@ -98,24 +98,24 @@
             // and fill it with the city and phone number
             var details = node.appendChild(document.createElement('div'));
             details.innerHTML = prop.description;
-        }
 
-        // Add an event listener for the links in the sidebar listing
-        link.addEventListener('click', function(e) {
-            // Update the currentFeature to the store associated with the clicked link
-            var clickedNode = geojson.features[this.dataPosition];
-            console.log(clickedNode);
-            // 1. Fly to the point associated with the clicked link
-            flyToStore(clickedNode);
-            // 2. Close all other popups and display popup for clicked store
-            createPopUp(clickedNode);
-            // 3. Highlight listing in sidebar (and remove highlight for all other listings)
-            var activeItem = document.getElementsByClassName('active');
-            if (activeItem[0]) {
-                activeItem[0].classList.remove('active');
-            }
-            this.parentNode.classList.add('active');
-        });
+            // Add an event listener for the links in the sidebar listing
+            link.addEventListener('click', function(e) {
+                // Update the currentFeature to the store associated with the clicked link
+                var clickedNode = geojson.features[this.dataPosition];
+                // console.log(clickedNode);
+                // 1. Fly to the point associated with the clicked link
+                flyToStore(clickedNode);
+                // 2. Close all other popups and display popup for clicked store
+                createPopUp(clickedNode);
+                // 3. Highlight listing in sidebar (and remove highlight for all other listings)
+                var activeItem = document.getElementsByClassName('active');
+                if (activeItem[0]) {
+                    activeItem[0].classList.remove('active');
+                }
+                this.parentNode.classList.add('active');
+            });
+        }
     }
 
     function flyToStore(currentFeature) {
