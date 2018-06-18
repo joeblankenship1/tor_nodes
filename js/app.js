@@ -82,6 +82,66 @@
             geocoder.on('result', function(ev) {
                 var searchResult = ev.result.geometry;
                 map.getSource('single-point').setData(searchResult);
+
+                var options = { units: 'miles' };
+                geojson.features.forEach(function(node) {
+                    Object.defineProperty(node.properties, 'distance', {
+                        value: turf.distance(searchResult, node.geometry, options),
+                        writable: true,
+                        enumerable: true,
+                        configurable: true
+                    });
+                });
+                geojson.features.sort(function(a, b) {
+                    if (a.properties.distance > b.properties.distance) {
+                        return 1;
+                    }
+                    if (a.properties.distance < b.properties.distance) {
+                        return -1;
+                    }
+                    // a must be equal to b
+                    return 0;
+                });
+                var nodes = document.getElementById('nodes');
+                while (nodes.firstChild) {
+                    nodes.removeChild(nodes.firstChild);
+                }
+
+                nodeLocationList(geojson);
+
+                function sortLonLat(nodeIdentifier) {
+                    var lats = [geojson.features[nodeIdentifier].geometry.coordinates[1], searchResult.coordinates[1]];
+                    var lons = [geojson.features[nodeIdentifier].geometry.coordinates[0], searchResult.coordinates[0]];
+
+                    var sortedLons = lons.sort(function(a, b) {
+                        if (a > b) {
+                            return 1;
+                        }
+                        if (a.distance < b.distance) {
+                            return -1;
+                        }
+                        return 0;
+                    });
+                    var sortedLats = lats.sort(function(a, b) {
+                        if (a > b) {
+                            return 1;
+                        }
+                        if (a.distance < b.distance) {
+                            return -1;
+                        }
+                        return 0;
+                    });
+
+                    map.fitBounds([
+                        [sortedLons[0], sortedLats[0]],
+                        [sortedLons[1], sortedLats[1]]
+                    ], {
+                        padding: 100
+                    });
+                }
+
+                sortLonLat(0);
+                createPopUp(geojson.features[0]);
             });
         });
     });
@@ -129,6 +189,11 @@
             // and fill it with the city and phone number
             var details = node.appendChild(document.createElement('div'));
             details.innerHTML = prop.description;
+
+            if (prop.distance) {
+                var roundedDistance = Math.round(prop.distance * 100) / 100;
+                details.innerHTML += '<p><strong>' + roundedDistance + ' miles away</strong></p>';
+            }
 
             // Add an event listener for the links in the sidebar listing
             link.addEventListener('click', function(e) {
