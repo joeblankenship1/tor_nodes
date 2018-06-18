@@ -52,6 +52,37 @@
                     node.classList.add('active');
                 }
             });
+
+            var geocoder = new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken
+            });
+
+            map.addControl(geocoder, 'top-left');
+
+            map.addSource('single-point', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features: [] // Notice that initially there are no features
+                }
+            });
+
+            map.addLayer({
+                id: 'point',
+                source: 'single-point',
+                type: 'circle',
+                paint: {
+                    'circle-radius': 10,
+                    'circle-color': '#007cbf',
+                    'circle-stroke-width': 3,
+                    'circle-stroke-color': '#fff'
+                }
+            });
+
+            geocoder.on('result', function(ev) {
+                var searchResult = ev.result.geometry;
+                map.getSource('single-point').setData(searchResult);
+            });
         });
     });
 
