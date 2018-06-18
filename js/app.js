@@ -34,8 +34,8 @@
                 if (features.length) {
                     var clickedPoint = features[0];
                     // 1. Fly to the point
-                    flyToStore(clickedPoint);
-                    // 2. Close all other popups and display popup for clicked store
+                    flyToNode(clickedPoint);
+                    // 2. Close all other popups and display popup for clicked node
                     createPopUp(clickedPoint);
                     // 3. Highlight listing in sidebar (and remove highlight for all other listings)
                     var activeItem = document.getElementsByClassName('active');
@@ -52,13 +52,13 @@
                     node.classList.add('active');
                 }
             });
-
+            // create geocoder object
             var geocoder = new MapboxGeocoder({
                 accessToken: mapboxgl.accessToken
             });
-
+            // add geocoder to map
             map.addControl(geocoder, 'top-left');
-
+            // create a marker layer for search results
             map.addSource('single-point', {
                 type: 'geojson',
                 data: {
@@ -66,7 +66,7 @@
                     features: [] // Notice that initially there are no features
                 }
             });
-
+            // create a style marker for search
             map.addLayer({
                 id: 'point',
                 source: 'single-point',
@@ -78,11 +78,11 @@
                     'circle-stroke-color': '#fff'
                 }
             });
-
+            // create geocoder actions for search to marker
             geocoder.on('result', function(ev) {
                 var searchResult = ev.result.geometry;
                 map.getSource('single-point').setData(searchResult);
-
+                // use turf to get distance from search to all nodes
                 var options = { units: 'miles' };
                 geojson.features.forEach(function(node) {
                     Object.defineProperty(node.properties, 'distance', {
@@ -92,6 +92,7 @@
                         configurable: true
                     });
                 });
+                // find the closest node and sort to furthest node
                 geojson.features.sort(function(a, b) {
                     if (a.properties.distance > b.properties.distance) {
                         return 1;
@@ -102,13 +103,14 @@
                     // a must be equal to b
                     return 0;
                 });
+                // create new order for list items
                 var nodes = document.getElementById('nodes');
                 while (nodes.firstChild) {
                     nodes.removeChild(nodes.firstChild);
                 }
-
+                // send order list to list generator function
                 nodeLocationList(geojson);
-
+                // fit map bound to search and closest node
                 function sortLonLat(nodeIdentifier) {
                     var lats = [geojson.features[nodeIdentifier].geometry.coordinates[1], searchResult.coordinates[1]];
                     var lons = [geojson.features[nodeIdentifier].geometry.coordinates[0], searchResult.coordinates[0]];
@@ -139,7 +141,7 @@
                         padding: 100
                     });
                 }
-
+                // call sort and call popup for closest node
                 sortLonLat(0);
                 createPopUp(geojson.features[0]);
             });
@@ -164,29 +166,28 @@
     }
 
     function nodeLocationList(geojson) {
-        // Iterate through the list of stores
+        // Iterate through the list of nodes
         for (i = 0; i < geojson.features.length; i++) {
             var currentFeature = geojson.features[i];
             // Shorten geojson.feature.properties to just `prop` so we're not
             // writing this long form over and over again.
             var prop = currentFeature.properties;
             // Select the node container in the HTML and append a div
-            // with the class 'item' for each store
+            // with the class 'item' for each node
             var nodes = document.getElementById('nodes');
             var node = nodes.appendChild(document.createElement('div'));
             node.className = 'item';
             node.id = 'node-' + i;
 
-            // Create a new link with the class 'title' for each store
-            // and fill it with the store address
+            // Create a new link with the class 'title' for each node
+            // and fill it with the node address
             var link = node.appendChild(document.createElement('a'));
             link.href = '#';
             link.className = 'title';
             link.dataPosition = i;
             link.innerHTML = prop.Name;
 
-            // Create a new div with the class 'details' for each store
-            // and fill it with the city and phone number
+            // Create a new div with the class 'details' for each node
             var details = node.appendChild(document.createElement('div'));
             details.innerHTML = prop.description;
 
@@ -197,12 +198,12 @@
 
             // Add an event listener for the links in the sidebar listing
             link.addEventListener('click', function(e) {
-                // Update the currentFeature to the store associated with the clicked link
+                // Update the currentFeature to the node associated with the clicked link
                 var clickedNode = geojson.features[this.dataPosition];
                 // console.log(clickedNode);
                 // 1. Fly to the point associated with the clicked link
-                flyToStore(clickedNode);
-                // 2. Close all other popups and display popup for clicked store
+                flyToNode(clickedNode);
+                // 2. Close all other popups and display popup for clicked node
                 createPopUp(clickedNode);
                 // 3. Highlight listing in sidebar (and remove highlight for all other listings)
                 var activeItem = document.getElementsByClassName('active');
@@ -214,7 +215,7 @@
         }
     }
 
-    function flyToStore(currentFeature) {
+    function flyToNode(currentFeature) {
         map.flyTo({
             center: currentFeature.geometry.coordinates,
             zoom: 15
