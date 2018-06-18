@@ -188,12 +188,13 @@
             link.innerHTML = prop.Name;
 
             // Create a new div with the class 'details' for each node
-            var details = node.appendChild(document.createElement('div'));
-            details.innerHTML = prop.description;
+            var details = node.appendChild(document.createElement('details'));
+            details.innerHTML = '<summary>Details</summary>' + prop.description;
 
+            var distances = node.appendChild(document.createElement('distances'));
             if (prop.distance) {
                 var roundedDistance = Math.round(prop.distance * 100) / 100;
-                details.innerHTML += '<p><strong>' + roundedDistance + ' miles away</strong></p>';
+                distances.innerHTML += '<p><strong>' + roundedDistance + ' miles away</strong></p>';
             }
 
             // Add an event listener for the links in the sidebar listing

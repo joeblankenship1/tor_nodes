@@ -5,19 +5,32 @@
     <meta charset="UTF-8">
     <title>Tor Fast Exit Nodes Map</title>
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet'>
+    <link href="https://api.mapbox.com/mapbox-assembly/v0.21.2/assembly.min.css" rel="stylesheet">
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css' rel='stylesheet' />
     <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.css' type='text/css' />
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <div class='sidebar'>
-        <div class='heading'>
-            <h1>Tor Fast Exit Nodes Locations</h1>
+    <div class='flex-parent viewport-full relative scroll-hidden'>
+        <div class='flex-child w-full w360-ml absolute static-ml left bottom'>
+            <div class='flex-parent flex-parent--column viewport-third h-full hmax-full bg-gray'>
+                <div class='flex-child flex-child--grow px12 py12 scroll-auto'>
+                    <div>
+                        <h2 class='txt-h3 txt-bold mb6'>Tor Fast Exit Nodes</h2>
+                    </div>
+                    <div id='nodes' class="nodes"></div>
+                </div>
+                <footer class='px12 py12 bg-gray-dark txt-s'>
+                    Map and Data: <a href="https://github.com/joeblankenship1/tor_nodes" target="_blank">here</a><br>
+                    Designed by: <a href="https://thejoeblankenship.com/" target="_blank">Joe Blankenship</a>
+                </footer>
+            </div>
         </div>
-        <div id='nodes' class='nodes'></div>
+        <div id='map' class='flex-child flex-child--grow bg-darken10 viewport-twothirds viewport-full-ml'></div>
     </div>
-    <div id='map' class='map'></div>
+
+    <script async defer src="https://api.mapbox.com/mapbox-assembly/v0.21.2/assembly.js"></script>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.js'></script>
     <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
