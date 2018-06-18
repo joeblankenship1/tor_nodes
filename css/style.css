@@ -123,10 +123,6 @@ a:hover {
     visibility: hidden;
 }
 
-
-
-/* Marker tweaks */
-
 .mapboxgl-popup-close-button {
     display: none;
 }
