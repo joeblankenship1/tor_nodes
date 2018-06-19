@@ -229,7 +229,7 @@
         var popUps = document.getElementsByClassName('mapboxgl-popup');
         // Check if there is already a popup on the map and if so, remove it
         if (popUps[0]) popUps[0].remove();
-
+        // create a popup with the name of node
         var popup = new mapboxgl.Popup({ closeOnClick: false })
             .setLngLat(currentFeature.geometry.coordinates)
             .setHTML('<h3>Tor Node - Exit Fast</h3>' +
@@ -238,10 +238,12 @@
     }
 
     function addGlobalZoom() {
+        // set global zoom position
         var coordinates = [0, 30];
         // add event listener for global zoom button
         document.getElementById('globalZoom').addEventListener('click', function() {
-            map.panTo(coordinates, {
+            map.flyTo({
+                center: coordinates,
                 zoom: 1
             });
         });
