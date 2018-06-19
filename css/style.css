@@ -29,8 +29,6 @@ a:hover {
     color: #8cc63f;
 }
 
-
-
 .heading {
     background: #fff;
     border-bottom: 1px solid #eee;
@@ -119,7 +117,7 @@ a:hover {
 
 .mapboxgl-popup-content h3 {
     background: #91c949;
-    color: #fff;
+    color: #4f4f4f;
     margin: 0;
     display: block;
     padding: 10px;
@@ -132,7 +130,8 @@ a:hover {
     margin: 0;
     display: block;
     padding: 10px;
-    font-weight: 400;
+    font-weight: 700;
+    color: #4f4f4f;
 }
 
 .mapboxgl-popup-content div {
@@ -152,7 +151,7 @@ a:hover {
 }
 
 .mapboxgl-popup {
-    padding-bottom: 50px;
+    padding-bottom: 10px;
 }
 
 .mapboxgl-ctrl-geocoder {
@@ -167,4 +166,17 @@ a:hover {
 .mapboxgl-ctrl-geocoder>div {
     min-width: 100%;
     margin-left: 0;
+}
+
+.btn-control {
+    background-image: url(../img/globe.png);
+    background-size: 50px 50px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    display: block;
+    cursor: pointer;
+    padding: 10px 10px;
 }

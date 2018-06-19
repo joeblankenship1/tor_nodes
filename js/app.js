@@ -23,9 +23,10 @@
 
     map.on('load', function(e) {
         $.getJSON('data/tornodes_exitfast.json', function(geojson) {
-            //console.log(geojson);
+            //console.log(geojson.features['0'].geometry.coordinates);
             addLayer(geojson);
             nodeLocationList(geojson);
+            addGlobalZoom();
 
             map.on('click', function(e) {
                 var features = map.queryRenderedFeatures(e.point, {
@@ -54,7 +55,8 @@
             });
             // create geocoder object
             var geocoder = new MapboxGeocoder({
-                accessToken: mapboxgl.accessToken
+                accessToken: mapboxgl.accessToken,
+                placeholder: 'Search for Closest Nodes by Location'
             });
             // add geocoder to map
             map.addControl(geocoder, 'top-left');
@@ -233,5 +235,15 @@
             .setHTML('<h3>Tor Node - Exit Fast</h3>' +
                 '<h4>' + currentFeature.properties.Name + '</h4>')
             .addTo(map);
+    }
+
+    function addGlobalZoom() {
+        var coordinates = [0, 30];
+        // add event listener for global zoom button
+        document.getElementById('globalZoom').addEventListener('click', function() {
+            map.panTo(coordinates, {
+                zoom: 1
+            });
+        });
     }
 })();

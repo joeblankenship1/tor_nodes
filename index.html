@@ -15,10 +15,10 @@
     <div class='flex-parent viewport-full relative scroll-hidden'>
         <div class='flex-child w-full w360-ml absolute static-ml left bottom'>
             <div class='flex-parent flex-parent--column viewport-third h-full hmax-full bg-gray'>
+                <header class='px12 py12 bg-gray-dark txt-xl'>
+                    Tor Fast Exit Nodes
+                </header>
                 <div class='flex-child flex-child--grow px12 py12 scroll-auto'>
-                    <div>
-                        <h2 class='txt-h3 txt-bold mb6'>Tor Fast Exit Nodes</h2>
-                    </div>
                     <div id='nodes' class="nodes"></div>
                 </div>
                 <footer class='px12 py12 bg-gray-dark txt-s'>
@@ -28,6 +28,7 @@
             </div>
         </div>
         <div id='map' class='flex-child flex-child--grow bg-darken10 viewport-twothirds viewport-full-ml'></div>
+        <button id='globalZoom' class="btn-control"></nav>
     </div>
 
     <script async defer src="https://api.mapbox.com/mapbox-assembly/v0.21.2/assembly.js"></script>
