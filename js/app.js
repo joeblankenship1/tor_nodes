@@ -24,34 +24,34 @@
     map.on('load', function(e) {
         $.getJSON('data/tornodes_exitfast.json', function(geojson) {
             //console.log(geojson.features['0'].geometry.coordinates);
-            addLayer(geojson);
+            addSource(geojson);
             nodeLocationList(geojson);
             addGlobalZoom();
 
-            map.on('click', function(e) {
-                var features = map.queryRenderedFeatures(e.point, {
-                    layers: ['locations']
-                });
-                if (features.length) {
-                    var clickedPoint = features[0];
+            // interactions with DOM markers
+            geojson.features.forEach(function(marker, i) {
+                // Create an img element for the marker
+                var el = document.createElement('div');
+                el.id = "marker-" + i;
+                el.className = 'marker';
+                // Add markers to the map at all points
+                new mapboxgl.Marker(el)
+                    .setLngLat(marker.geometry.coordinates)
+                    .addTo(map);
+                el.addEventListener('click', function(e) {
                     // 1. Fly to the point
-                    flyToNode(clickedPoint);
+                    flyToNode(marker);
                     // 2. Close all other popups and display popup for clicked node
-                    createPopUp(clickedPoint);
-                    // 3. Highlight listing in sidebar (and remove highlight for all other listings)
+                    createPopUp(marker);
+                    // 3. Highlight node in sidebar (and remove highlight for all other nodes)
                     var activeItem = document.getElementsByClassName('active');
+                    e.stopPropagation();
                     if (activeItem[0]) {
                         activeItem[0].classList.remove('active');
                     }
-                    var selectedFeature = clickedPoint.properties.Name;
-                    for (var i = 0; i < geojson.features.length; i++) {
-                        if (geojson.features[i].properties.Name === selectedFeature) {
-                            selectedFeatureIndex = i;
-                        }
-                    }
-                    var node = document.getElementById('node-' + selectedFeatureIndex);
+                    var node = document.getElementById('node-' + i);
                     node.classList.add('active');
-                }
+                });
             });
             // create geocoder object
             var geocoder = new MapboxGeocoder({
@@ -150,20 +150,11 @@
         });
     });
 
-    function addLayer(geojson) {
+    function addSource(geojson) {
         // Add the data to your map as a layer
-        map.addLayer({
-            id: 'locations',
-            type: 'symbol',
-            // Add a GeoJSON source containing place coordinates and information.
-            source: {
-                type: 'geojson',
-                data: geojson
-            },
-            layout: {
-                'icon-image': 'circle-stroked-15',
-                'icon-allow-overlap': true,
-            }
+        map.addSource('places', {
+            type: 'geojson',
+            data: geojson
         });
     }
 

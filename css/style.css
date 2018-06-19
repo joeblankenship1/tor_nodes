@@ -180,3 +180,13 @@ a:hover {
     cursor: pointer;
     padding: 10px 10px;
 }
+
+.marker {
+    border: none;
+    cursor: pointer;
+    height: 30px;
+    width: 20px;
+    background-image: url(../img/tor_node.png);
+    background-color: rgba(0, 0, 0, 0);
+    background-size: 20px 30px;
+}
