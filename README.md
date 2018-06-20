@@ -18,13 +18,13 @@ I obtained the data for this project from `https://tormap.void.gr/` in `KML` for
 ogr2ogr -f GeoJSON output_filename.json input_filename.kml
 ```
 
-Due to how the data was generated from the TOR API, there are several field that have no real purpose for visualization in the app. I piped my ogr2ogr output into `mapshaper` in order to clean and reduce the fields and coordinates:
+Due to how the data was generated from the TOR API, there are several fields that have no real purpose for visualization in the app. I piped my ogr2ogr output into `mapshaper` in order to clean and reduce the fields and coordinates:
 
 ```
 mapshaper ogr2ogr_output.json -filter-fields Name,description -o format=geojson precision=.0001 new_output_filename.json
 ```
 
-I am then able to import the data to the app.
+I am then able to import the data into the app.
 
 ### Mapping the Data
 
