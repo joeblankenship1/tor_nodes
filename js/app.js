@@ -22,7 +22,7 @@
     });
 
     map.on('load', function(e) {
-        $.getJSON('data/tornodes_exitfast.json', function(geojson) {
+        $.getJSON('data/tormap_exitFast_p.json', function(geojson) {
             //console.log(geojson.features['0'].geometry.coordinates);
             addSource(geojson);
             nodeLocationList(geojson);
