@@ -212,7 +212,7 @@
     function flyToNode(currentFeature) {
         map.flyTo({
             center: currentFeature.geometry.coordinates,
-            zoom: 15
+            zoom: 13
         });
     }
 
@@ -221,7 +221,7 @@
         // Check if there is already a popup on the map and if so, remove it
         if (popUps[0]) popUps[0].remove();
         // create a popup with the name of node
-        var popup = new mapboxgl.Popup({ closeOnClick: false })
+        var popup = new mapboxgl.Popup({ closeOnClick: true })
             .setLngLat(currentFeature.geometry.coordinates)
             .setHTML('<h3>Tor Node - Exit Fast</h3>' +
                 '<h4>' + currentFeature.properties.Name + '</h4>')
@@ -229,10 +229,13 @@
     }
 
     function addGlobalZoom() {
+        var popUps = document.getElementsByClassName('mapboxgl-popup');
         // set global zoom position
         var coordinates = [0, 30];
         // add event listener for global zoom button
         document.getElementById('globalZoom').addEventListener('click', function() {
+            // Check if there is already a popup on the map and if so, remove it
+            if (popUps[0]) popUps[0].remove();
             map.flyTo({
                 center: coordinates,
                 zoom: 1
