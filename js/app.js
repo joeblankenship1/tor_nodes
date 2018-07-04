@@ -29,31 +29,7 @@
             addSource(geojson);
             nodeLocationList(geojson);
             addGlobalZoom();
-            // interactions with DOM markers
-            geojson.features.forEach(function(marker, i) {
-                // Create an img element for the marker
-                var el = document.createElement('div');
-                el.id = "marker-" + i;
-                el.className = 'marker';
-                // Add markers to the map at all points
-                new mapboxgl.Marker(el)
-                    .setLngLat(marker.geometry.coordinates)
-                    .addTo(map);
-                el.addEventListener('click', function(e) {
-                    // 1. Fly to the point
-                    flyToNode(marker);
-                    // 2. Close all other popups and display popup for clicked node
-                    createPopUp(marker);
-                    // 3. Highlight node in sidebar (and remove highlight for all other nodes)
-                    var activeItem = document.getElementsByClassName('active');
-                    e.stopPropagation();
-                    if (activeItem[0]) {
-                        activeItem[0].classList.remove('active');
-                    }
-                    var node = document.getElementById('node-' + i);
-                    node.classList.add('active');
-                });
-            });
+            mapTooltip(geojson);
             addGeocoder(geojson);
         });
     });
@@ -115,6 +91,34 @@
                 this.parentNode.classList.add('active');
             });
         }
+    }
+
+    function mapTooltip(geojson) {
+        // interactions with DOM markers
+        geojson.features.forEach(function(marker, i) {
+            // Create an img element for the marker
+            var el = document.createElement('div');
+            el.id = "marker-" + i;
+            el.className = 'marker';
+            // Add markers to the map at all points
+            new mapboxgl.Marker(el)
+                .setLngLat(marker.geometry.coordinates)
+                .addTo(map);
+            el.addEventListener('click', function(e) {
+                // 1. Fly to the point
+                flyToNode(marker);
+                // 2. Close all other popups and display popup for clicked node
+                createPopUp(marker);
+                // 3. Highlight node in sidebar (and remove highlight for all other nodes)
+                var activeItem = document.getElementsByClassName('active');
+                e.stopPropagation();
+                if (activeItem[0]) {
+                    activeItem[0].classList.remove('active');
+                }
+                var node = document.getElementById('node-' + i);
+                node.classList.add('active');
+            });
+        });
     }
 
     function flyToNode(currentFeature) {
