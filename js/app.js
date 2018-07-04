@@ -22,16 +22,28 @@
     });
 
     map.on('load', function(e) {
-        // add if statement 
+
+        addGlobalZoom();
 
         $.getJSON('data/tormap_exitFast_p.json', function(geojson) {
             //console.log(geojson.features['0'].geometry.coordinates);
+
+            // add event listener for change in  
+            // check status of check boxes DOM elements
+            // if check is true
+            //     load json to map if check is true
+            //     load to list if check is true
+            // elif
+            //     remove from map
+            //     remove from nodelist
+
             addSource(geojson);
             nodeLocationList(geojson);
-            addGlobalZoom();
             mapTooltip(geojson);
             addGeocoder(geojson);
         });
+
+        // duplicate above (once functional) for each GeoJSON
     });
 
     function addSource(geojson) {
