@@ -22,12 +22,13 @@
     });
 
     map.on('load', function(e) {
+        // add if statement 
+
         $.getJSON('data/tormap_exitFast_p.json', function(geojson) {
             //console.log(geojson.features['0'].geometry.coordinates);
             addSource(geojson);
             nodeLocationList(geojson);
             addGlobalZoom();
-
             // interactions with DOM markers
             geojson.features.forEach(function(marker, i) {
                 // Create an img element for the marker
@@ -53,100 +54,7 @@
                     node.classList.add('active');
                 });
             });
-            // create geocoder object
-            var geocoder = new MapboxGeocoder({
-                accessToken: mapboxgl.accessToken,
-                placeholder: 'Search for Closest Nodes by Location'
-            });
-            // add geocoder to map
-            map.addControl(geocoder, 'top-left');
-            // create a marker layer for search results
-            map.addSource('single-point', {
-                type: 'geojson',
-                data: {
-                    type: 'FeatureCollection',
-                    features: [] // Notice that initially there are no features
-                }
-            });
-            // create a style marker for search
-            map.addLayer({
-                id: 'point',
-                source: 'single-point',
-                type: 'circle',
-                paint: {
-                    'circle-radius': 10,
-                    'circle-color': '#007cbf',
-                    'circle-stroke-width': 3,
-                    'circle-stroke-color': '#fff'
-                }
-            });
-            // create geocoder actions for search to marker
-            geocoder.on('result', function(ev) {
-                var searchResult = ev.result.geometry;
-                map.getSource('single-point').setData(searchResult);
-                // use turf to get distance from search to all nodes
-                var options = { units: 'miles' };
-                geojson.features.forEach(function(node) {
-                    Object.defineProperty(node.properties, 'distance', {
-                        value: turf.distance(searchResult, node.geometry, options),
-                        writable: true,
-                        enumerable: true,
-                        configurable: true
-                    });
-                });
-                // find the closest node and sort to furthest node
-                geojson.features.sort(function(a, b) {
-                    if (a.properties.distance > b.properties.distance) {
-                        return 1;
-                    }
-                    if (a.properties.distance < b.properties.distance) {
-                        return -1;
-                    }
-                    // a must be equal to b
-                    return 0;
-                });
-                // create new order for list items
-                var nodes = document.getElementById('nodes');
-                while (nodes.firstChild) {
-                    nodes.removeChild(nodes.firstChild);
-                }
-                // send order list to list generator function
-                nodeLocationList(geojson);
-                // fit map bound to search and closest node
-                function sortLonLat(nodeIdentifier) {
-                    var lats = [geojson.features[nodeIdentifier].geometry.coordinates[1], searchResult.coordinates[1]];
-                    var lons = [geojson.features[nodeIdentifier].geometry.coordinates[0], searchResult.coordinates[0]];
-
-                    var sortedLons = lons.sort(function(a, b) {
-                        if (a > b) {
-                            return 1;
-                        }
-                        if (a.distance < b.distance) {
-                            return -1;
-                        }
-                        return 0;
-                    });
-                    var sortedLats = lats.sort(function(a, b) {
-                        if (a > b) {
-                            return 1;
-                        }
-                        if (a.distance < b.distance) {
-                            return -1;
-                        }
-                        return 0;
-                    });
-
-                    map.fitBounds([
-                        [sortedLons[0], sortedLats[0]],
-                        [sortedLons[1], sortedLats[1]]
-                    ], {
-                        padding: 100
-                    });
-                }
-                // call sort and call popup for closest node
-                sortLonLat(0);
-                createPopUp(geojson.features[0]);
-            });
+            addGeocoder(geojson);
         });
     });
 
@@ -240,6 +148,103 @@
                 center: coordinates,
                 zoom: 1
             });
+        });
+    }
+
+    function addGeocoder(geojson) {
+        // create geocoder object
+        var geocoder = new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            placeholder: 'Search for Closest Nodes by Location'
+        });
+        // add geocoder to map
+        map.addControl(geocoder, 'top-left');
+        // create a marker layer for search results
+        map.addSource('single-point', {
+            type: 'geojson',
+            data: {
+                type: 'FeatureCollection',
+                features: [] // Notice that initially there are no features
+            }
+        });
+        // create a style marker for search
+        map.addLayer({
+            id: 'point',
+            source: 'single-point',
+            type: 'circle',
+            paint: {
+                'circle-radius': 10,
+                'circle-color': '#007cbf',
+                'circle-stroke-width': 3,
+                'circle-stroke-color': '#fff'
+            }
+        });
+        // create geocoder actions for search to marker
+        geocoder.on('result', function(ev) {
+            var searchResult = ev.result.geometry;
+            map.getSource('single-point').setData(searchResult);
+            // use turf to get distance from search to all nodes
+            var options = { units: 'miles' };
+            geojson.features.forEach(function(node) {
+                Object.defineProperty(node.properties, 'distance', {
+                    value: turf.distance(searchResult, node.geometry, options),
+                    writable: true,
+                    enumerable: true,
+                    configurable: true
+                });
+            });
+            // find the closest node and sort to furthest node
+            geojson.features.sort(function(a, b) {
+                if (a.properties.distance > b.properties.distance) {
+                    return 1;
+                }
+                if (a.properties.distance < b.properties.distance) {
+                    return -1;
+                }
+                // a must be equal to b
+                return 0;
+            });
+            // create new order for list items
+            var nodes = document.getElementById('nodes');
+            while (nodes.firstChild) {
+                nodes.removeChild(nodes.firstChild);
+            }
+            // send order list to list generator function
+            nodeLocationList(geojson);
+            // fit map bound to search and closest node
+            function sortLonLat(nodeIdentifier) {
+                var lats = [geojson.features[nodeIdentifier].geometry.coordinates[1], searchResult.coordinates[1]];
+                var lons = [geojson.features[nodeIdentifier].geometry.coordinates[0], searchResult.coordinates[0]];
+
+                var sortedLons = lons.sort(function(a, b) {
+                    if (a > b) {
+                        return 1;
+                    }
+                    if (a.distance < b.distance) {
+                        return -1;
+                    }
+                    return 0;
+                });
+                var sortedLats = lats.sort(function(a, b) {
+                    if (a > b) {
+                        return 1;
+                    }
+                    if (a.distance < b.distance) {
+                        return -1;
+                    }
+                    return 0;
+                });
+
+                map.fitBounds([
+                    [sortedLons[0], sortedLats[0]],
+                    [sortedLons[1], sortedLats[1]]
+                ], {
+                    padding: 100
+                });
+            }
+            // call sort and call popup for closest node
+            sortLonLat(0);
+            createPopUp(geojson.features[0]);
         });
     }
 })();
