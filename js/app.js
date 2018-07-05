@@ -21,31 +21,39 @@
         zoom: 1
     });
 
-    map.on('load', function(e) {
+    var torData = {"type":"FeatureCollection", "features": []};
 
+    map.on('load', function(e) {
+        // add global zoom button
         addGlobalZoom();
 
-        $.getJSON('data/tormap_exitFast_p.json', function(geojson) {
-            //console.log(geojson.features['0'].geometry.coordinates);
-
-            // create an empty array
-            // add event listener for change in  
-            // check status of check boxes DOM elements
-            // if check is true
-            //     load json to map from array if check is true
-            //     load to list from array if check is true
-            // elif
-            //     remove from map from array
-            //     remove from nodelist from array
-
-            addSource(geojson);
-            nodeLocationList(geojson);
-            mapTooltip(geojson);
-            addGeocoder(geojson);
+        $('input[name=stable]').change(function() {
+            if(this.checked) {
+                //console.log(this.checked);
+                $.getJSON('data/tormap_stable_p.json', function(data) {
+                    console.log(data.features[0]);
+                    //torData.features.push(data.features);
+                    //console.log(torData);
+                    //updateMap(torData);
+                });
+            } else {
+                $.getJSON('data/tormap_stable_p.json', function(data) {
+                    // console.log(data.features);
+                    //torData.remove(data.features);
+                    console.log(torData);
+                    //updateMap(data);
+                });
+            }
         });
 
-        // duplicate above (once functional) for each GeoJSON
-    });
+     });
+
+    function updateMap(geojson) {
+        addSource(geojson);
+        nodeLocationList(geojson);
+        mapTooltip(geojson);
+        addGeocoder(geojson);
+    }
 
     function addSource(geojson) {
         // Add the data to your map as a layer
