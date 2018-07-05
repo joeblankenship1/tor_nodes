@@ -28,14 +28,15 @@
         $.getJSON('data/tormap_exitFast_p.json', function(geojson) {
             //console.log(geojson.features['0'].geometry.coordinates);
 
+            // create an empty array
             // add event listener for change in  
             // check status of check boxes DOM elements
             // if check is true
-            //     load json to map if check is true
-            //     load to list if check is true
+            //     load json to map from array if check is true
+            //     load to list from array if check is true
             // elif
-            //     remove from map
-            //     remove from nodelist
+            //     remove from map from array
+            //     remove from nodelist from array
 
             addSource(geojson);
             nodeLocationList(geojson);
