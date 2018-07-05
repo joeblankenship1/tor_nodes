@@ -28,25 +28,48 @@
         addGlobalZoom();
 
         $('input[name=stable]').change(function() {
-            if(this.checked) {
-                //console.log(this.checked);
+            if(this.checked == true) {
                 $.getJSON('data/tormap_stable_p.json', function(data) {
-                    console.log(data.features[0]);
-                    //torData.features.push(data.features);
-                    //console.log(torData);
+                    data.features.forEach(function(entry) {
+                        torData.features.push(entry);
+                    });
+                    console.log(torData);
                     //updateMap(torData);
                 });
-            } else {
-                $.getJSON('data/tormap_stable_p.json', function(data) {
-                    // console.log(data.features);
-                    //torData.remove(data.features);
-                    console.log(torData);
-                    //updateMap(data);
-                });
+            }
+            else if(this.checked == false) {
+                torData.features.forEach(function(entry) {
+                    torData.features = $.grep(torData.features, function(feature, index) {
+                        return feature.properties.Name != entry.properties.Name;
+                    });
+                })
+                console.log(torData);
+                //updateMap(torData);
             }
         });
 
-     });
+        $('input[name=stableFast]').change(function() {
+            if(this.checked == true) {
+                $.getJSON('data/tormap_stableFast_p.json', function(data) {
+                    data.features.forEach(function(entry) {
+                        torData.features.push(entry);
+                    });
+                    console.log(torData);
+                    //updateMap(torData);
+                });
+            }
+            else if(this.checked == false) {
+                torData.features.forEach(function(entry) {
+                    torData.features = $.grep(torData.features, function(feature, index) {
+                        return feature.properties.Name != entry.properties.Name;
+                    });
+                })
+                console.log(torData);
+                //updateMap(torData);
+            }
+        });
+
+    });
 
     function updateMap(geojson) {
         addSource(geojson);
