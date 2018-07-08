@@ -13,83 +13,17 @@
 </head>
 
 <body>
-    <div class='flex-parent-inline flex-parent--center-cross txt-m txt-bold'>
-        <header class='px6 py4 bg-gray-dark txt-l'>
-            Tor Nodes Map
-        </header>
-        <label class='checkbox-container py4 px6'>
-            <input type='checkbox' />
-            <div class='checkbox mr6 checkbox--orange'>
-                <svg class='icon'>
-                    <use xlink:href='#icon-check' />
-                </svg>
-            </div>
-            Stable
-        </label>
-        <label class='checkbox-container py4 px6'>
-            <input type='checkbox' />
-            <div class='checkbox mr6 checkbox--orange'>
-                <svg class='icon'>
-                    <use xlink:href='#icon-check' />
-                </svg>
-            </div>
-            Stable Fast
-        </label>
-        <label class='checkbox-container py4 px6'>
-            <input type='checkbox' />
-            <div class='checkbox mr6 checkbox--green'>
-                <svg class='icon'>
-                    <use xlink:href='#icon-check' />
-                </svg>
-            </div>
-            Exit
-        </label>
-        <label class='checkbox-container py4 px6'>
-            <input checked type='checkbox' />
-            <div class='checkbox mr6 checkbox--green'>
-                <svg class='icon'>
-                    <use xlink:href='#icon-check' />
-                </svg>
-            </div>
-            Exit Fast
-        </label>
-        <label class='checkbox-container py4 px6'>
-            <input type='checkbox' />
-            <div class='checkbox mr6 checkbox--pink'>
-                <svg class='icon'>
-                    <use xlink:href='#icon-check' />
-                </svg>
-            </div>
-            Authority
-        </label>
-        <label class='checkbox-container py4 px6'>
-            <input type='checkbox' />
-            <div class='checkbox mr6 checkbox--yellow'>
-                <svg class='icon'>
-                    <use xlink:href='#icon-check' />
-                </svg>
-            </div>
-            Other
-        </label>
-        <label class='checkbox-container py4 px6'>
-            <input type='checkbox' />
-            <div class='checkbox mr6 checkbox--red'>
-                <svg class='icon'>
-                    <use xlink:href='#icon-check' />
-                </svg>
-            </div>
-            Bad
-        </label>
-    </div>
     <div class='flex-parent viewport-full relative scroll-hidden'>
         <div class='flex-child w-full w360-ml absolute static-ml left bottom'>
             <div class='flex-parent flex-parent--column viewport-third h-full hmax-full bg-gray'>
+                <header class='px6 py4 bg-gray-dark txt-xl'>
+                    Tor Map - Fast Exit Nodes
+                </header>
                 <div class='flex-child flex-child--grow px12 py12 scroll-auto'>
                     <div id='nodes' class="nodes"></div>
                 </div>
                 <footer class='px12 py12 bg-gray-dark txt-s'>
-                    Map and Data: <a href="https://github.com/joeblankenship1/tor_nodes" target="_blank">here</a> ツ 
-                    Designed by: <a href="https://thejoeblankenship.com/" target="_blank">Joe Blankenship</a>
+                    Map and Data: <a href="https://github.com/joeblankenship1/tor_nodes" target="_blank">here</a> ツ Designed by: <a href="https://thejoeblankenship.com/" target="_blank">Joe Blankenship</a>
                 </footer>
             </div>
         </div>
