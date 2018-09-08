@@ -26,6 +26,7 @@
     map.on('load', function(e) {
         // add global zoom button
         addGlobalZoom();
+        addGeocoder(torData);
 
         $('input[name=stable]').change(function() {
             if(this.checked == true) {
@@ -34,7 +35,7 @@
                         torData.features.push(entry);
                     });
                     console.log(torData);
-                    //updateMap(torData);
+                    // updateMap(torData);
                 });
             }
             else if(this.checked == false) {
@@ -44,6 +45,7 @@
                     });
                 })
                 console.log(torData);
+                //location.reload();
                 //updateMap(torData);
             }
         });
@@ -75,7 +77,6 @@
         addSource(geojson);
         nodeLocationList(geojson);
         mapTooltip(geojson);
-        addGeocoder(geojson);
     }
 
     function addSource(geojson) {
